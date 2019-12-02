@@ -1,0 +1,46 @@
+﻿.solverrow{
+    margin: 0 !important;
+    max-width: 750px;
+}
+.nopadding{
+    padding: 0 !important;
+}
+.firstrow{
+    border-top: 1px solid black;
+}
+.oddrow{
+    border-bottom: 1px solid black;
+}
+.firstcol{
+    border-left: 1px solid black;
+}
+.middlecol{
+    border-right: 1px solid black;
+}
+.lastcol{
+    border-right: 1px solid black;
+}
+.angmenu {
+    margin-right: 15px;
+    margin-top: 50px
+}
+
+.angmenu > button{
+    font-size: 22px;
+}
+
+.btn-generate {
+    color: white;
+    background-color: #ee7600;
+}
+
+.invalid {
+    color: red;
+}
+
+.correct {
+    color: green;
+}
+
+
+

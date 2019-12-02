@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="sudoku_solverModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Sudokus">
+          <Key>
+            <PropertyRef Name="SudokuId" />
+          </Key>
+          <Property Name="SudokuId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SudokuArray" Type="binary" MaxLength="81" />
+          <Property Name="SudokuDate" Type="datetime" Nullable="false" />
+          <Property Name="IsLoaded" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="sudoku_solverModelStoreContainer">
+          <EntitySet Name="Sudokus" EntityType="Self.Sudokus" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="sudoku_solverModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Sudoku">
+          <Key>
+            <PropertyRef Name="SudokuId" />
+          </Key>
+          <Property Name="SudokuId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SudokuArray" Type="Binary" MaxLength="81" FixedLength="true" />
+          <Property Name="SudokuDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsLoaded" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="sudoku_solverEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Sudokus" EntityType="Self.Sudoku" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="sudoku_solverModelStoreContainer" CdmEntityContainer="sudoku_solverEntities2">
+          <EntitySetMapping Name="Sudokus">
+            <EntityTypeMapping TypeName="sudoku_solverModel.Sudoku">
+              <MappingFragment StoreEntitySet="Sudokus">
+                <ScalarProperty Name="IsLoaded" ColumnName="IsLoaded" />
+                <ScalarProperty Name="SudokuId" ColumnName="SudokuId" />
+                <ScalarProperty Name="SudokuArray" ColumnName="SudokuArray" />
+                <ScalarProperty Name="SudokuDate" ColumnName="SudokuDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

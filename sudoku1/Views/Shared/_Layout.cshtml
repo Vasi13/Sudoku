@@ -1,0 +1,572 @@
+﻿<!DOCTYPE html>
+<html ng-app="sudokuApp">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    @Scripts.Render("~/js/plugins")
+    @Styles.Render("~/css/app")
+
+    @Scripts.Render("~/js/angularApp")
+    @Styles.Render("~/css/angularApp")
+
+    @Styles.Render("~/css/jquerryApp")
+    @Scripts.Render("~/js/jquerryApp")
+
+    <title>Sudoku Solutions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+    @RenderBody()
+
+    <script type="text/ng-template" id="toast-template.html">
+        <md-toast>
+            <span class="md-toast-text" flex>{{data.message}}</span>
+        </md-toast>
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var game = Sudoku.getInstance();
+            $('#expert').click(function () {
+                game.generate('expert');
+            });
+            $('#intermediate').click(function () {
+                game.generate('intermediate');
+            });
+            $('#beginner').click(function () {
+                game.generate('beginner');
+            });
+            $('#container').append(game.getGameBoard());
+
+            $('#solve').click(function () {
+                game.solve();
+            });
+            $('#validate').click(function () {
+                game.validate();
+            });
+            $('#reset').click(function () {
+                game.reset();
+            });
+            $('#row').click(function () {
+                game.hint('row');
+            });
+            $('#box').click(function () {
+                game.hint('box');
+            });
+            $('#column').click(function () {
+                game.hint('column');
+            });
+            $('#cell').click(function () {
+                game.hint('cell');
+            });
+            $('#save').click(function () {
+                game.save();
+            });
+            $('#load').click(function () {
+                game.load();
+            });
+            $('#style').click(function () {
+                game.style();
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        function detailsFunction() {
+            if ($('#x').text() == 'Details einblenden') {
+                $('#x').text('Details ausblenden');
+                $('#details').animate({ height: '400', opacity: '1' }, 500)
+            } else {
+                $('#x').text('Details einblenden');
+                $('#details').animate({ height: '0', opacity: '0' }, 800)
+            }
+        }
+    </script>
+
+    <nav class="navbar navbar-default navbar-fixed-top" id="y" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-main">
+                    <span class="sr-only">Toggle navigation </span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a id="navbar-brand" href="https://www.i2solutions.de/">
+                    <img src="~/Assets/images/i2solutionstrans.png" height="50" width="200" />
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse-main">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#home" target="_self">Home</a></li>
+                    <li><a href="#history" target="_self">History</a></li>
+                    <li><a href="#rules" target="_self">Rules</a></li>
+                    <li><a href="#strategy" target="_self">Strategy</a></li>
+                    <li><a href="#solver" target="_self">Solver</a></li>
+                    <li><a href="#cont" target="_self">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="home">
+        <div class="landing-text">
+            <center>
+                <h1>Oki Sudoki</h1>
+                <h2>Become a master solver in hours!</h2>
+                <a href="#rules" target="_self" class="btn btn-default btn-lg">Get started</a>
+            </center>
+        </div>
+    </div>
+
+    <div class="gallery js-flickity" id="history"
+         data-flickity-options='{ "freeScroll": true, "wrapAround": true }'>
+
+
+        <div class="gallery-cell">
+            <md-card class="card">
+                <div class="padding">
+                    <div class="container">
+                        <div class="row">
+                            <center>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                    <img src="~/Assets/images/phone.jpg" class="md-card-image" alt="Washed Out" />
+                                </div>
+                            </center>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 text-center">
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">Sudoku in our times</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content>
+                                    <p class="cardtext">
+                                        In 1997, Hong Kong judge Wayne Gould saw a partly completed puzzle in a Japanese bookshop. Over six years,
+                                        he developed a computer program to produce unique puzzles rapidly. Knowing that British newspapers have
+                                        a long history of publishing crosswords and other puzzles, he promoted Sudoku to `The Times` in Britain, which
+                                        launched it on November 12, 2004.
+                                        Sudoku puzzles rapidly spread to other newspapers as a regular feature and is nowadays a very popular software
+                                        on PCs, websites, and mobile phones.
+                                    </p>
+                                </md-card-content>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+
+        <div class="gallery-cell">
+            <md-card class="card">
+                <div class="padding">
+                    <div class="container">
+                        <div class="row">
+                            <center>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                    <img src="~/Assets/images/euler.jpg" class="md-card-image" alt="Washed Out" />
+                                </div>
+                            </center>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 text-center">
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">The one who started it all</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content>
+                                    <p class="cardtext">
+                                        Whether at breakfast, in the subway or just to pass the time: Sudoku has become a popular game in recent years.
+                                        And who invented the little squares? Right, the Swiss. Leonhard Euler, a mathematician from Bern,
+                                        conceived the forerunner of today's sudoku.
+                                        Euler invented the "Latin Squares", where the numbers in each row and column of a grid block were allowed
+                                        to stand only once. In the late 70s, a New Yorker magazine allegedly discovered Euler's original
+                                        and published the game as "Number Place."
+                                    </p>
+                                </md-card-content>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+
+        <div class="gallery-cell">
+            <md-card class="card">
+                <div class="padding">
+                    <div class="container">
+                        <div class="row">
+                            <center>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                    <img src="~/Assets/images/signs.gif" class="md-card-image" alt="Washed Out" />
+                                </div>
+                            </center>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 text-center">
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">Meaning behind the name</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content>
+                                    <p class="cardtext">
+                                        But it was only the Japanese in the 1980s that made it really popular. The Japanese took over the game
+                                        and presented it under the name Sudoku - with huge success.
+                                        The name “sudoku” is abbreviated from the Japanese suuji wa dokushin ni kagiru, which means
+                                        “the numbers (or digits) must remain single.” The name itself basically explains the core rule of the
+                                        puzzle game."Sudoku" is a registered trademark in Japan and is now published in mainstream Japanese periodicals,
+                                        such as the Asahi Shimbun.
+                                    </p>
+                                </md-card-content>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </md-card>
+        </div>
+
+    </div>
+
+
+
+    @*rules*@
+    <center>
+        <div class="column-section-wrapper ">
+            <div class="padding">
+                <div class="container" id="rules">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6">
+                            <div id="rulestext">
+                                <div id="rulestextheader">
+                                    <center>
+                                        <h1> Rules of the game</h1>
+                                    </center>
+                                </div>
+                                <p class="lead">
+                                    A Sudoku is a logical puzzle with a partially completed grid.
+                                    The objective of is to fill a 9x9 grid with digits so that each column, each row, and each of the nine 3x3 squares, contains all of the digits from 1 to 9 only once.
+                                    If the puzzle has been compiled correctly, there will be only one solution.
+                                    <br />
+                                    <br />
+                                    Before you start solving classical versions of Sudoku, you can test if you understood the rules of the game with our Sudoku generator.
+                                    The used version is slightly less complicated than the 9x9 version.
+                                    You must fill the 6x6 grid in such a way that every row and column and each of the six 3x2 boxes, contains all the digits from 1 to 6 only once.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-lg-6" id="rulesimg">
+                            <img src="~/Assets/images/download3.jpg" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+
+    @*angular solver instructions*@
+    <center>
+        <div class="container">
+            <div class="padding" style="padding-top: 20px;  width:1100px;">
+                <div id="instructionsang">
+                    <div id="instructionsangheader">
+                        <center>
+                            <h1> Instructions</h1>
+                        </center>
+                    </div>
+                    <ul class="lead" style="padding-left:90px;padding-right:50px;" id="anglist">
+                        <li>Click on `Reset` to clear all the values. </li>
+                        <li>Click on the `Generate button` to generate a completly new board.</li>
+                        <li> Fill the empty cells with the corresponding values. If the color of the number is red, the inserted value is incorrect! </li>
+                        <li>You can also solve a puzzle by clicking on `Solve`. </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </center>
+
+    @*angular solver*@
+    <center class="lightgrey">
+        <div class="padding" style="padding-top:0;">
+            <div ng-controller="SudokuController" class="container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="min-width: 500px; ">
+                        <center>
+                            <form role="form" class="center-block" style=" margin-top:50px;">
+                                <div ng-repeat="row in [0,1,2,3,4,5]" class="row solverrow">
+                                    <div ng-repeat="column in [0,1,2,3,4,5]" class="col-xs-1 col-sm-1 col-md-1 col-lg-1 nopadding " style="min-width: 16%;">
+                                        <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                               type="number" maxlength="1" class="form-control text-center {{ row | rowFilter }} {{ column | columnFilter }} " ng-model="puzzle.board[row][column]"
+                                               @*ng-class="{correct: validate(row,column),invalid: !validate(row,column)}"*@ style="font-size: 24px; max-width: 200px !important; height:70px;">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row angmenu">
+                                <button type="button" class="btn btn-primary" ng-click="reset()">Reset</button>
+                                <button type="button" class="btn btn-generate" ng-click="generate()">Generate  board</button>
+                                <button type="button" class="btn btn-success" ng-click="solve()">Solve</button>
+                                <button type="button" class="btn btn-success" ng-click="test()">test</button>
+                            </div>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+
+
+
+    <div id="fixed"></div>
+
+    @*strategy*@
+    <center>
+        <div class="column-section-wrapper ">
+            <div class="padding">
+                <div class="container" id="strategy">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6" id="strategyimg">
+                            <img src="~/Assets/images/strategy.jpg" />
+                        </div>
+
+                        <div class="col-sm-12 col-lg-6">
+                            <div id="strategytext">
+                                <div id="strategyheader">
+                                    <center>
+                                        <h1> Common Solving Strategies</h1>
+                                    </center>
+                                </div>
+                                <p class="lead">
+                                    Only square rule:
+                                    <br />
+                                    If a group has seven squares allocated with only two numbers left to allocate it is often
+                                    the case that an intersecting (or shared) group forces a number to go in one of
+                                    the squares and not the other one.
+                                    <br />
+                                    <br />
+                                    Two out of three rule:
+                                    <br />
+                                    Take groups of three rows and columns in turn, working methodically
+                                    through the whole grid. First look for all the 1s then all the 2s, 3s etc. all
+                                    the way through to the 9s. Check how the rows/columns interact with eachother and then apply the Only squre rule
+                                    <br />
+                                    <br />
+                                    Sub-group exclusion rule:
+                                    <br />
+                                    This takes a lot more explanation as instead of 'forcing' a number in a square, it is an
+                                    application of logic that knocks out options that at first sight looked possible.
+                                    By excluding one possibility for a square may mean there is only one remaining
+                                    possibility, so the square can be safely set to the remaining option.
+                                    <br />
+                                    <br />
+                                    Now you are ready to become a master Sudoku solver!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+
+    @*jquerry solver instructions*@
+    <center>
+        <div class="container">
+            <div class="padding" style="padding-top: 0 !important; width:1100px; ">
+                <div class="instructionsjq">
+                    <div id="instructionsjqheader">
+                        <center>
+                            <h1> Instructions</h1>
+                        </center>
+                    </div>
+                    <ul class="lead" style="padding-left:90px;" id="jquerylist">
+                        <li>Click on `Reset` to clear all the values. </li>
+                        <li>Click on the `Save` button to save a puzzle to a database</li>
+                        <li>Click on the `Load` button to load a puzzle from the database</li>
+                        <li>Select one cell and then click on the key button to solve the cell itself or any section it belongs to</li>
+                        <li>Click on the `Generate Board` button to generate a completly new board.</li>
+                        <li>CLick on `Change Design` to switch the design of the board</li>
+                        <li>You can also solve a puzzle by clicking on `Solve`. </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="btn-followup">
+                <center>
+                    <button id="x" onclick="detailsFunction()">Details einblenden</button>
+                </center>
+            </div>
+        <div class="row" id="details">
+                <div class=" col-sm-12 col-md-6 col-lg-6" style="height:inherit">
+                    <img src="~/Assets/images/high1.png" class="detailsimg" />
+                    <p class="lead detailstext">
+                        If you clcik on a cell that was already asigned with a value, all cells on the board that  have
+                        the same value will be highlighted in orange. This is especially usefull if you are trying to solve the puzzle as fast aspossible,
+                        since you have a better picture at how the different sections interact with eachother. To remove the effect just click on an empty
+                        cell or reset the board
+                    </p>
+                </div>
+
+                <div class="col-sm-12 col-md-6 col-lg-6" style="height:inherit">
+                    <img src="~/Assets/images/error.png" class="detailsimg" />
+                    <p class="lead detailstext">
+                        If you assign a cell to a value which breaks one of the sectionns rule, in other words if that value was already
+                        assigned in the same row, column or box, then the cell will be marked with a red border. To make errors eassier to remvoe, sections which contain
+                        erros will be highlighted in red. All the visual changes will disappear if you change the value of the cell to a legal one or if you
+                        reset the matrix.
+                    </p>
+                </div>
+            </div>
+    </center>
+
+
+    @*jquerry solver*@
+    <center class="lightgrey">
+        <div class="padding" id="jqsolver" style="padding-top:20px;">
+            <center>
+                <div class="column-section-wrapper lightgrey">
+                    <div class="container" id="solver">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <div class="row" style="margin-top: 50px;">
+
+
+                                    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap ng-controller="ToastController" id="jqbuttons">
+
+                                        <md-menu md-offset="-270 90">
+                                            <md-button aria-label="Open menu" class="md-fab" ng-click="$mdMenu.open($event)" style="background:#23415C; ">
+                                                <md-tooltip md-direction="left" style="background: #23415C; font-size:25px;">Generate</md-tooltip>
+                                                <md-icon md-svg-src="/Assets/images/material-design-icons/grid.svg"></md-icon>
+                                            </md-button>
+                                            <md-menu-content width="4">
+                                                <md-menu-item ng-repeat="item in ['expert','intermediate','beginner']">
+                                                    <md-button id="{{item}}"> <span md-menu-align-target>Level</span> {{item}}  </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+
+                                        <md-button aria-label="reset" id="reset" class="md-fab" style="background: #3276b1;">
+                                            <md-tooltip md-direction="top" style="background: #3276b1; font-size:25px;">Reset</md-tooltip>
+                                            <md-icon md-svg-src="/Assets/images/material-design-icons/restore.svg"></md-icon>
+                                        </md-button>
+
+                                        <md-button aria-label="save" id="save" class="md-fab" style="background: #47a447;">
+                                            <md-tooltip md-direction="top" style="background: #47a447; font-size:25px;">Save</md-tooltip>
+                                            <md-icon md-svg-src="/Assets/images/material-design-icons/content-save.svg"></md-icon>
+                                        </md-button>
+
+                                        <md-button aria-label="load" id="load" class="md-fab" style="background: orange;">
+                                            <md-tooltip md-direction="top" style="background: orange; font-size:25px;">Load</md-tooltip>
+                                            <md-icon md-svg-src="/Assets/images/material-design-icons/download.svg"></md-icon>
+                                        </md-button>
+
+                                        <md-button ng-click="showSimpleToast()" aria-label="style" id="style" class="md-fab" style="background: orange;">
+                                            <md-tooltip md-direction="top" style="background: orange; font-size:25px;">Style</md-tooltip>
+                                            <md-icon md-svg-src="/Assets/images/material-design-icons/brush.svg"></md-icon>
+                                        </md-button>
+
+                                        <md-button aria-label="settings" id="settings" class="md-fab" style="background: orange;">
+                                            <md-tooltip md-direction="top" style="background: orange; font-size:25px;">Settings</md-tooltip>
+                                            <md-icon md-svg-src="/Assets/images/material-design-icons/settings.svg"></md-icon>
+                                        </md-button>
+
+                                        <md-menu md-offset="100 90">
+                                            <md-button aria-label="Open menu" class="md-fab" ng-click="$mdMenu.open($event)" style="background:#23415C; ">
+                                                <md-tooltip md-direction="right" style="background: #23415C; font-size:25px;">Clue</md-tooltip>
+                                                <md-icon md-svg-src="/Assets/images/material-design-icons/key.svg"></md-icon>
+                                            </md-button>
+                                            <md-menu-content width="4">
+                                                <md-menu-item ng-repeat="item in ['cell','row','column','box']">
+                                                    <md-button id="{{item}}"> <span md-menu-align-target>Solve</span> {{item}}  </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+
+                                    </section>
+                                    <div id="toastspace"> </div>
+
+
+
+                                    <div id="container" style="width:900px; height: 600px;">
+
+                                    </div>
+
+
+
+                                    <div>
+                                        <div id="menu1" class="sudoku-menu1">
+                                            <button id="solve">Solve</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </center>
+        </div>
+    </center>
+
+
+    <footer class="container-fluid text-center" id="cont">
+        <div class="row">
+            <div class="col-sm-4">
+                <h2>Contact us</h2>
+                <br />
+                <h3>
+
+                    Tel: 02402 – 10 29 94 0
+                    <br />
+                    Fax: 02402 – 10 29 94 15
+                    <br />
+                    Mail: info@i2solutions.de
+                </h3>
+            </div>
+            <div class="col-sm-4">
+                <h2>This project was realised with</h2>
+                <div class="row" style="margin-top: 30px;">
+                    <div class="col-lg-6">
+                        <h3>
+                            <a href="https://angularjs.org/">AngularJS</a>
+                            <br />
+                            <a href="https://getbootstrap.com/">Bootstrap</a>
+                            <br />
+                            <a href="https://docs.microsoft.com/en-us/dotnet/csharp/"> C#</a>
+                            <br />
+                            <a href="https://en.wikipedia.org/wiki/Cascading_Style_Sheets">CSS</a>
+                            <br />
+                        </h3>
+                    </div>
+                    <div class="col-lg-6">
+                        <h3>
+                            <a href="https://flickity.metafizzy.co/">Flickity</a>
+                            <br />
+                            <a href="https://en.wikipedia.org/wiki/HTML">HTML</a>
+                            <br />
+                            <a href="https://en.wikipedia.org/wiki/JavaScript">JavaScript</a>
+                            <br />
+                            <a href="https://jquery.com/">jQuerry</a>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <h2>Headquarter</h2>
+                <br />
+
+                <h3>
+                    Pfarrer-Gau-Str. 13
+                    <br />
+                    52223 Stolberg
+                    <br />
+                    <a href="https://www.i2solutions.de/">i2solutions.de</a>
+                </h3>
+            </div>
+        </div>
+        <div style="margin-top: 100px;">
+            <h2>2018 © i2solutions GmbH</h2>
+        </div>
+    </footer>
+
+
+</body>
+</html>

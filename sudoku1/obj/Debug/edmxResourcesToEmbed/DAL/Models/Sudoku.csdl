@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="sudoku_solverModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Sudoku">
+    <Key>
+      <PropertyRef Name="SudokuId" />
+    </Key>
+    <Property Name="SudokuId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SudokuArray" Type="Binary" MaxLength="81" FixedLength="true" />
+    <Property Name="SudokuDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IsLoaded" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="sudoku_solverEntities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Sudokus" EntityType="Self.Sudoku" />
+  </EntityContainer>
+</Schema>

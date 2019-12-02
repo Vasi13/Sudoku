@@ -1,0 +1,65 @@
+﻿* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.flickity-viewport {
+    background: #23415C;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+.gallery-cell {
+    width: 66%;
+    min-height: inherit !important;
+    margin-right: 10px;
+    background: #23415C;
+    counter-increment: gallery-cell;
+}
+
+
+
+/* cell number */
+.gallery-cell:before {
+    display: block;
+    text-align: center;
+    line-height: 200px;
+    font-size: 80px;
+}
+
+.card{
+    height: inherit;
+}
+
+.container{
+    max-width: 1300px;
+}
+
+.row {
+    margin-top: 75px;
+}
+
+.md-card-image{
+    height: 400px;
+}
+
+.cardtext{
+    width: 400px;
+    font-size: 22px;
+    text-align:center;
+}
+
+.md-headline {
+    color: #ee7600;
+    font-size: 40px;
+}
+
+@media only screen and (max-width: 960px) {
+    .gallery {
+        height:0;
+        opacity:0;
+    }
+}
+
